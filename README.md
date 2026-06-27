@@ -2,6 +2,8 @@
 
 TypeScript bot that detects and trades **cross-line mispricings** across connected sports markets within a single Polymarket event (moneyline, spread, totals, draw, BTTS). Runs in **simulation** (paper trading) or **live** (CLOB V2) mode with a **blessed-contrib** terminal dashboard.
 
+<img width="1983" height="793" alt="0f0acf14-94f9-4fc7-a95f-a5179ae14f57" src="https://github.com/user-attachments/assets/dce3d178-dd49-4c06-b639-6e4bd3908463" />
+
 ## Strategy
 
 Sports markets inside one event should satisfy no-arbitrage relationships. When one line reprices faster than another after a game-state change, temporary violations appear. The bot:
